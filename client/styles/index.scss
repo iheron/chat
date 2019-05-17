@@ -1,0 +1,15 @@
+$font-size: 50px;
+
+:global{
+  #__next, .body {
+    height: 100vh;
+  }
+  .container{min-width: 600px; max-width: 1200px;height:100%;margin-left: auto; margin-right: auto;}
+  .header {position: fixed;z-index: 99;width: 100%;}
+}
+
+:root {
+  --some-color: red;
+}
+
+.test{font-size: $font-size; color: var(--some-color);}

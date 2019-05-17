@@ -1,0 +1,32 @@
+.header-container {
+  display: flex;flex-direction: column;height: 100%;
+  .menu-tools {
+    display: flex; flex-direction: row; justify-content: space-between; align-items: center; flex-grow: 1;
+    height: 100%;
+  }
+  .nav-tools{
+    .nav{}
+  }
+
+  .logo-cn {
+    cursor: pointer;
+    background-position: center;
+    flex-shrink: 0;
+    width: 240px;
+    height: 100%;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-image: url('/static/cnLogo.png');
+  }
+  .logo-en {
+    cursor: pointer;
+    background-position: center;
+    flex-shrink: 0;
+    width: 240px;
+    height: 100%;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-image: url('/static/enLogo.png');
+  }
+  .language-button{}
+}

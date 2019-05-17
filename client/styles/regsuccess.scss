@@ -1,0 +1,77 @@
+:global {
+  .mobile_body {
+    padding-top: 0
+  }
+}
+
+.title-img {
+  display: flex;
+  background-image: url(/static/reglogo.png);
+  background-repeat: no-repeat;
+  height: 150px;
+  width: 150px;
+  top: 15px;
+  background-size: contain;
+  align-self: center;
+  margin: 0 auto;
+  margin-top: 15px;
+}
+
+.bg {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-image: url(/static/invitationBG.png);
+  background-repeat: no-repeat;
+  height: 120px;
+  background-size: contain;
+}
+
+.front {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  border-radius: 7px;
+  margin: 0px 15px 0px 15px;
+  background-color: white;
+  box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.2);
+  flex-direction: column;
+  .title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #232631;
+    letter-spacing: 5px;
+    line-height: 30px;
+  }
+  .form {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    margin: 20px;
+    flex: 1;
+    > button {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      border-radius: 20px;
+      width: 100%;
+      > span {
+        margin: 0 auto;
+      }
+    }
+  }
+  .footer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-image: url(/static/invibanner.png);
+    background-repeat: no-repeat;
+    height: 120px;
+    background-size: contain;
+  }
+}

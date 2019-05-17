@@ -1,0 +1,150 @@
+:global {
+  .mobile_body {
+    padding-top: 0;
+    .ant-input:focus {
+      box-shadow: 0 0 0 0px;
+    }
+  }
+
+}
+
+.browser-tip {
+  position: absolute;
+  left: 0;
+  top: 0px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 0.8;
+  text-align: center;
+  color: white;
+  padding: 10px;
+  background-image: url(/static/arrow.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 95% 0;
+}
+
+.title-img {
+  display: flex;
+  background-image: url(/static/reglogo.png);
+  background-repeat: no-repeat;
+  height: 150px;
+  width: 150px;
+  top: 15px;
+  background-size: contain;
+  align-self: center;
+  margin: 0 auto;
+  margin-top: 15px;
+}
+
+.bg {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  background-image: url(/static/logo.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin: 0 auto;
+  width: 80px;
+  margin-top: 35px;
+}
+
+.user-register-agreement {
+  font-size: 12px;
+  color: #468df7;
+  margin: 0 auto;
+  display: flex;
+  padding: 30px;
+  >div{
+    margin-left:5px;
+  }
+}
+
+.user-register-tip {
+  font-size: 12px;
+  color: #878B96;
+  margin: 0 auto;
+  display: flex;
+  flex: 1;
+}
+
+.front {
+  display: flex;
+  flex: 1;
+  background-color: white;
+  box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.2);
+  flex-direction: column;
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 5px;
+    line-height: 30px;
+    background-color: #468df7;
+  }
+  .form {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: 10px;
+  }
+  .footer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-image: url(/static/inivloginBG.png);
+    background-repeat: no-repeat;
+    height: 120px;
+    background-size: contain;
+  }
+}
+
+.form {
+  .user-mobile {
+    display: flex;
+    margin-bottom:30px;
+    .valid-div {
+      font-size: 14px;
+      text-align: center;
+      width: 150px;
+      padding-top: 5px;
+      border-bottom: 1px solid #ddd;
+      height: 32px;
+    }
+    > input {
+      margin-right: 5px;
+    }
+    > input, button {
+      border: none;
+      border-bottom: 1px solid #ddd;
+      color: #232631;
+    }
+  }
+  > input {
+    margin-top: 5px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+  }
+  > button {
+    border-radius: 70px;
+    margin-top: 20px;
+    height: 45px;
+  }
+}
+
+@media all and (orientation: landscape) {
+  /*横屏时代码*/
+  .mobile-orientation {
+    min-height: 500px
+  }
+
+}

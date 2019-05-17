@@ -1,0 +1,220 @@
+.main{
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.pointer{
+  z-index: 100;
+  color: #ffffff;
+  line-height: 2;
+  font-size: 15px;
+  //background-image: linear-gradient(41deg, rgba(160,146,238,0.80) 0%, #1890FF 100%);
+  text-align: center;
+  background-image: url(/static/mobileBack.png);
+  height: 245px;
+}
+.title{
+  font-family: PingFangSC-Semibold;
+  padding-top: 60px;
+  font-size: 40px;
+}
+.textPointer{
+  z-index: 100;
+  color: #878B96;
+  position: relative;
+  margin: auto;
+  width: 92%;
+  margin-bottom: 30px;
+  margin-top: -75px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+.model {
+    //padding-bottom : 10px !important;
+  :global {
+    .ant-modal-content {
+      z-index          : 9999;
+      position         : relative;
+      background-color : #fff;
+      border           : 0;
+      box-shadow       : 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-radius    : 8px;
+    }
+    .ant-modal-close-x{
+      line-height: 3;
+    }
+  }
+}
+.modelImg{
+  text-align: center;
+  :global {
+    .ant-modal-close-x{
+      line-height: 3;
+    }
+  }
+}
+
+.lineOne{
+  width: 100%;
+  height: 50%;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  top: 0;
+  position: absolute;
+}
+.box{
+  width: 34%;
+  height: 100%;
+  background-color: #FFFFFF;
+  padding-top: 30px;
+  justify-content: center;
+  line-height: 2
+}
+.box1{
+  width: 34%;
+  height: 130px;
+  background-color: #FFFFFF;
+  background-image: url(/static/wechatImg.png);
+  background-position: (50% 35%);
+  background-repeat: no-repeat;
+  background-size: 35%;
+  line-height: 13;
+  border-right: 1px solid #DDDDDD;
+}
+.box1:active{
+  background-color: #DDDDDD;
+}
+.box2{
+  width: 34%;
+  height: 130px;
+  background-color: #FFFFFF;
+  background-image: url(/static/Moments.png);
+  background-position: (50% 35%);
+  background-repeat: no-repeat;
+  background-size: 30%;
+  line-height: 13;
+  border-right: 1px solid #DDDDDD;
+}
+.box2:active{
+  background-color: #DDDDDD;
+}
+.box3{
+  width: 34%;
+  height: 130px;
+  background-color: #FFFFFF;
+  background-image: url(/static/QRCode.png);
+  background-position: (50% 35%);
+  background-repeat: no-repeat;
+  background-size: 35%;
+  line-height: 13;
+}
+.box3:active {
+  background-color: #DDDDDD;
+}
+.lineTwo{
+  width: 100%;
+  height: 50%;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  top: 130px;
+  position: absolute;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.outBox{
+  width: 100%;
+  box-shadow: 0 4px 20px 0 rgba(164, 164, 164, 0.6);
+  height: 260px;
+  margin: auto;
+  top: 0;
+  position: absolute;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.outBox2{
+  line-height: 2;
+  text-align: justify;
+  position: relative;
+  bottom: 13px;
+  top: 280px;
+  margin: auto;
+  width: 100%;
+  justify-content: center;
+  color: #232631;
+  margin-bottom: 70px;
+}
+.subscript{
+  width: 30%;
+  height: 100px;
+  margin: auto;
+  background-image: url(/static/subscribe.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  top: 24px;
+  background-size: 90%;
+}
+
+.lineOnee {
+  width: 95%;
+  margin: auto;
+  padding-top: 20px;
+  line-height: 1;
+  font-size: 16px;
+  color: black;
+  font-weight: 600;
+  text-align: justify;
+}
+.point{
+  float: left;
+  width: 10px;
+  height: 10px;
+  background-color:#1890FF;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+}
+.lineTwoo{
+  font-size: 12px;
+  color: #646464;
+  margin-top: 15px;
+  text-align: justify;
+  padding-left: 30px;
+  width: 96%;
+}
+.titleModel{
+  font-size: 24px;
+  color:#000000;
+  text-align: center;
+  margin: auto;
+}
+.footer{
+  font-size: 12px;
+  position: relative;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 20px;
+  text-align: center;
+  color: #000000;
+}
+.ruleInfo{
+  text-align: center;
+  color: rgb(24, 144, 255);
+  cursor: pointer;
+  top: 24px;
+  padding-bottom: 20px;
+  position: relative;
+}
