@@ -14,7 +14,7 @@ export default ({children, title, theme}) => (
       <Helmet defaultTitle={title} titleTemplate={`%s`}/>
 
     </Head>
-    <div className={'header-placeholder'}/>
+    {/*<div className={'header-placeholder'}/>*/}
     {/*<Header/>*/}
     <main role="main">
       {children}
