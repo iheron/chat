@@ -3,8 +3,8 @@
 
 
 ## 环境
-* node v8.x
-* yarn v1.7, 所有包管理使用yarn安装
+* node v10.x
+* yarn v1.16, 所有包管理使用yarn安装
 
 ## 常用命令
 * yarn install           # 安装所有依赖
@@ -23,7 +23,6 @@
 * /components , react的ui组件
 * /containers , redux的容器组件
 * /helper, 工具文件
-* /intl , 多语言支持
 * /layouts , 布局文件
 * /pages , 路由页面
 * /reducers , redux的reducer
