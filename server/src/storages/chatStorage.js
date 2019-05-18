@@ -1,4 +1,6 @@
 import config from '../../config'
+import moment from 'moment'
+import { MessageType } from '../helpers/const'
 import nkn from 'nkn-client'
 import find from 'lodash/find'
 import map from 'lodash/map'
@@ -10,8 +12,34 @@ export default class ChatStorage {
 
   constructor () {
     this.clients = []   // online clients
+    this.service = nkn()
     //this.adminModel = mongoose.connection.model('admins', adminSchema)
 
+  }
+
+  /**
+   *
+   * @param from 'system': client show a 'system' tag
+   * @param message
+   */
+  broadcast (from, message) {
+    this.clients.forEach((item) => {
+      this.service.send(item.addr, message)
+    })
+  }
+
+  /**
+   *
+   * @param from 'all': boradcast to every one
+   * @param to
+   * @param message
+   */
+  send (from, to, message) {
+    if (from === MessageType.ALL) {
+      this.broadcast(from, message)
+    } else {
+      this.servce.send(to, {...message, to: to, time: moment()})
+    }
   }
 
   createClient (username) {
@@ -25,50 +53,23 @@ export default class ChatStorage {
     return {username: username, addr: client.addr}
   }
 
-  getClientList () {
-    return map(this.clients, 'username')
-  }
-
-  /**
-   * 设置access token到redis，并且带上过期时间
-   */
-  async setAccessToken (key, token) {
-    return await redisStorage.set(_ACCESS_TOKEN_KEY_ + key, token, 'EX', _TOKEN_EXP_)
-  }
-
-  async setValid (key, val) {
-    return await redisStorage.set(_VALID_KEY_ + key, val, 'EX', _VALID_EXP_)
-  }
-
-  async delAccessToken (key) {
-    return await redisStorage.del(_ACCESS_TOKEN_KEY_ + key)
-  }
-
-  async refreshToken (userId) {
-    let token = jwt.sign({userId: userId}, config.secret, {expiresIn: '7d'})
-    this.setAccessToken(userId, token)
-    return token
-  }
-
-  async signIn (username, password) {
-    let user = await this.adminModel.findOne({username: username})
-    console.log(user)
-    if (user) {
-      if (user.password === password) {
-        // let token = jwt.sign({userId: user._id}, config.secret, {expiresIn: '7d'})
-        let token = signToken(user._id, ClientType.ADMIN, config.secret, {}, {expiresIn: '7d'})
-        this.setAccessToken(user._id, token)
-        return token
-      } else {
-        throw errorStatus(statusCode.PASSWORD_ERROR, 'password error')
-      }
+  joinRoom (username, addr) {
+    let findClient = find(this.clients, {username: username})
+    if (!!findClient) {
+      findClient.addr = addr
     } else {
-      throw errorStatus(statusCode.USERNAME_ERROR, 'username error')
+      this.clients.push({addr: addr, username: username})
     }
+    this.broadcast(MessageType.SYSTEM, JSON.stringify({
+      type   : MessageType.SYSTEM,
+      message: `${username} has joined the room`,
+      time   : moment()
+    }))
+    return true
   }
 
-  async getUserById (userId) {
-    let user = await this.adminModel.findOne({_id: userId}).lean()
-    return user
+  getClientList () {
+    return this.clients
   }
+
 }

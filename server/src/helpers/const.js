@@ -1,7 +1,7 @@
-let ClientType = {
-  MOBILE: 'mobile',
-  WEB   : 'web',
-  ADMIN : 'admin'
+let MessageType = {
+  ALL: 'all',
+  SYSTEM  : 'system',
+  FUNCTION: 'function'
 }
 
-export {  ClientType}
+export { MessageType }

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import DefaultLayout from '../layouts/default'
 import Helmet from 'react-helmet'
 import Router from 'next/router'
-import { joinRoom } from '../actions/chat'
+import { enterUsername } from '../actions/chat'
 
 import { Input, Icon, PageHeader, Button, Form } from 'antd'
 
@@ -23,6 +23,8 @@ class Index extends Component {
     return {}
   }
 
+  state = {loading: false}
+
   componentWillMount () {
   }
 
@@ -34,23 +36,23 @@ class Index extends Component {
   componentWillUnmount () {
 
   }
+
   componentWillReceiveProps (nextProps) {
-    let {chat} = nextProps
-    if (!!chat.user) {
-      Router.push('/chat')
-    }
+
   }
 
   handleSubmit = e => {
-    let {joinRoom} = this.props
+    let {enterUsername} = this.props
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values)
-
-        joinRoom(values.username)
+        enterUsername(values.username)
+        Router.push('/chat')
       }
     })
+  }
+  enterLoading = () => {
+    this.setState({loading: true})
   }
 
   render () {
@@ -69,7 +71,7 @@ class Index extends Component {
             {getFieldDecorator('username', {
               rules: [{required: true, message: 'Please input your username!'}],
             })(
-              <Input
+              <Input autoFocus={true}
                 prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
                 placeholder="Username"
               />,
@@ -77,7 +79,8 @@ class Index extends Component {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" disabled={hasErrors(getFieldsError())}>
+            <Button type="primary" htmlType="submit" disabled={hasErrors(getFieldsError())} loading={this.state.loading}
+                    onClick={this.enterLoading}>
               Join Room
             </Button>
           </Form.Item>
@@ -91,6 +94,6 @@ const mapStateToProps = (store) => ({
   chat: store.chat
 })
 const mapDispatchToProps = (dispatch) => ({
-  joinRoom: (username) => dispatch(joinRoom(username))
+  enterUsername: (username) => dispatch(enterUsername(username))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create({name: 'join_room'})(Index))
