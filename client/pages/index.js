@@ -3,16 +3,16 @@ import { connect } from 'react-redux'
 import DefaultLayout from '../layouts/default'
 import Helmet from 'react-helmet'
 
-import { switchTheme } from '../actions/theme'
+import { joinRoom } from '../actions/chat'
 
-import { Input, Icon, PageHeader, Button, Menu, Form } from 'antd'
-
-const MenuItem = Menu.Item
+import { Input, Icon, PageHeader, Button, Form } from 'antd'
 
 import styles from '../styles/home.scss'
-function hasErrors(fieldsError) {
-  return Object.keys(fieldsError).some(field => fieldsError[field]);
+
+function hasErrors (fieldsError) {
+  return Object.keys(fieldsError).some(field => fieldsError[field])
 }
+
 class Index extends Component {
   static getInitialProps ({store, req}) {
     const isServer = !!req
@@ -23,37 +23,35 @@ class Index extends Component {
     return {}
   }
 
-
   componentWillMount () {
   }
 
-  componentDidMount() {
+  componentDidMount () {
     // To disabled submit button at the beginning.
-    this.props.form.validateFields();
+    this.props.form.validateFields()
   }
 
   componentWillUnmount () {
 
   }
-
-  onSwitcherTheme = (event) => {
-    let {key, keyPath} = event
-    this.props.switchTheme(key)
+  componentWillReceiveProps (nextProps) {
+    console.log(nextProps)
   }
 
-
-
   handleSubmit = e => {
-    e.preventDefault();
+    let {joinRoom} = this.props
+    e.preventDefault()
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        console.log('Received values of form: ', values)
+
+        joinRoom(values.username)
       }
-    });
+    })
   }
 
   render () {
-    const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form
+    const {getFieldDecorator, getFieldsError, getFieldError, isFieldTouched} = this.props.form
     const usernameError = isFieldTouched('username') && getFieldError('username')
     return (
       <DefaultLayout theme={this.props.theme}>
@@ -70,10 +68,10 @@ class Index extends Component {
         <Form className={styles.body} layout="inline" onSubmit={this.handleSubmit}>
           <Form.Item validateStatus={usernameError ? 'error' : ''} help={usernameError || ''}>
             {getFieldDecorator('username', {
-              rules: [{ required: true, message: 'Please input your username!' }],
+              rules: [{required: true, message: 'Please input your username!'}],
             })(
               <Input
-                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
                 placeholder="Username"
               />,
             )}
@@ -91,9 +89,9 @@ class Index extends Component {
 }
 
 const mapStateToProps = (store) => ({
-  theme: store.theme
+  chat: store.chat
 })
 const mapDispatchToProps = (dispatch) => ({
-  switchTheme: (theme) => dispatch(switchTheme(theme))
+  joinRoom: (username) => dispatch(joinRoom(username))
 })
-export default connect(mapStateToProps, mapDispatchToProps)(Form.create({ name: 'join_room' })(Index))
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create({name: 'join_room'})(Index))
