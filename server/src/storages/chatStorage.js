@@ -1,32 +1,32 @@
 import config from '../../config'
-import statusCode from '../helpers/statusCode'
-import { errorStatus } from '../helpers/statusCode'
-import adminSchema from '../schemas/adminSchema'
-
-import jwt from 'jsonwebtoken'
-import redisStorage from './redisStorage'
+import nkn from 'nkn-client'
+import find from 'lodash/find'
+import map from 'lodash/map'
 import mongoose from 'mongoose'
-import { signToken } from '../helpers/token'
-import { ClientType } from '../helpers/const'
 
-const _TOKEN_EXP_ = 604800         // 7天 (s)
-const _VALID_EXP_ = 600            // 600秒
-const _ACCESS_TOKEN_KEY_ = 'access_token:'
-const _VALID_KEY_ = 'valid:'
+const _TIME_OUT_ = 5      // seconds
 
-export default class SignStorage{
+export default class ChatStorage {
+
   constructor () {
-    this.adminModel = mongoose.connection.model('admins', adminSchema)
+    this.clients = []   // online clients
+    //this.adminModel = mongoose.connection.model('admins', adminSchema)
+
   }
 
-  async verifyAccessToken (userId, token) {
-    let val = await redisStorage.get(_ACCESS_TOKEN_KEY_ + userId)
-    return val === token
+  createClient (username) {
+    const client = nkn()
+    let findClient = find(this.clients, {username: username})
+    if (!!findClient) {
+      findClient.addr = client.addr
+    } else {
+      this.clients.push({addr: client.addr, username: username})
+    }
+    return {username: username, addr: client.addr}
   }
 
-  async verifyMobileToken (mobile, token) {
-    let val = await redisStorage.get(_MOBILE_TOKEN_KEY_ + mobile)
-    return val === token
+  getClientList () {
+    return map(this.clients, 'username')
   }
 
   /**
@@ -56,7 +56,7 @@ export default class SignStorage{
     if (user) {
       if (user.password === password) {
         // let token = jwt.sign({userId: user._id}, config.secret, {expiresIn: '7d'})
-        let token = signToken(user._id, ClientType.ADMIN,config.secret, {}, {expiresIn: '7d'})
+        let token = signToken(user._id, ClientType.ADMIN, config.secret, {}, {expiresIn: '7d'})
         this.setAccessToken(user._id, token)
         return token
       } else {

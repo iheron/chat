@@ -4,6 +4,8 @@ import express from 'express'
 import logger from 'morgan'
 import bodyParser from 'body-parser'
 
+import chatRouter from './routes/chat'
+
 import MongodbStorage from './storages/mongodbStorage'
 
 import indexRouter from './routes'
@@ -20,7 +22,6 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
-app.use('/api', express.static('public'))
 
 app.use(function (req, res, next) {
   console.log('request ------------------------->')
@@ -39,7 +40,7 @@ app.use(function (req, res, next) {
 })
 
 
-app.use('/api', indexRouter)
+app.use('/chat', chatRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

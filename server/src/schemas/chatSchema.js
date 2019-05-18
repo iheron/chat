@@ -1,17 +1,15 @@
 import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
-const ObjectId = Schema.Types.ObjectId
+const ObjectId = Schema.ObjectId
 
-// 管理员
 export default new Schema({
-    username: String,
-    password: String,
-    groups  : Array,
-    auths   : Array
+    from_name: String,
+    to_name  : String,
+    message  : String,
+    time     : Number
   },
   {
-    collection: 'admins',
     timestamps:
       {createdAt: 'created_at', updatedAt: 'updated_at'}
   })
