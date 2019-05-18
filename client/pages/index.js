@@ -2,7 +2,7 @@ import { Component } from 'react'
 import { connect } from 'react-redux'
 import DefaultLayout from '../layouts/default'
 import Helmet from 'react-helmet'
-
+import Router from 'next/router'
 import { joinRoom } from '../actions/chat'
 
 import { Input, Icon, PageHeader, Button, Form } from 'antd'
@@ -35,7 +35,10 @@ class Index extends Component {
 
   }
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps)
+    let {chat} = nextProps
+    if (!!chat.user) {
+      Router.push('/chat')
+    }
   }
 
   handleSubmit = e => {
@@ -59,10 +62,6 @@ class Index extends Component {
           <title>Home</title>
         </Helmet>
 
-        {/*<Menu onClick={this.onSwitcherTheme}>
-          <MenuItem key='light'> white </MenuItem>
-          <MenuItem key='dark'> black </MenuItem>
-        </Menu>*/}
         <PageHeader onBack={() => null} backIcon={false} title="Home" subTitle="Enter your username and join room."/>
 
         <Form className={styles.body} layout="inline" onSubmit={this.handleSubmit}>

@@ -1,49 +1,16 @@
 @import "~antd/dist/antd.less";
 @import "~antd-mobile/dist/antd-mobile.less";
-@import "./light/index.less";
-@import "./dark/index.less";
 @import "./main.less";
-
+@import "./color";
 :global {
 
   .theme{height: 100%;}
   .header {background-color: @bg-color-1;height: 100px;position: fixed;z-index: 99;width: 100%;top: 0;border-bottom: 1px solid @border-color;}
   .header-placeholder {height: 100px;}
 
+  .ant-btn-group{display: flex;
+    > *:first-child {width:100%;}
+  }
+  .ant-btn-link{padding: 0;}
 
-  /********** antd **********/
-  .ant-menu{
-    h1{font-size: 14px; color: @font-color;margin: 0;padding: 0;}
-    .ant-menu-item-selected {
-      background-color: transparent;color:@font-color;
-      border-bottom: 2px solid #1890ff;
-      &:after {content: none;}
-      h1 {color: @primary-color;}
-    }
-    .ant-menu-item-active{color: @primary-color;border-bottom:none;}
-    .ant-menu-item { text-align: center;}
-    .ant-menu-item:hover {
-      h1 {color: @primary-color;}
-    }
-    .ant-menu-submenu {
-      font-weight: 500;color: @font-color;
-      .ant-menu-submenu-arrow {right: auto; }
-    }
-    .ant-menu-item, .ant-menu-submenu-title{
-      transition: none;
-    }
-  }
-  .ant-menu-horizontal{
-    border-bottom: none;
-  }
-  //.ant-menu-horizontal {
-  //  > .ant-menu-item:hover{border-bottom:none;color: transparent;}
-  //}
-}
-
-@media (max-width: @screen-md) {
-  :global {
-    .header {background-color: @bg-color-1;height: 50px;}
-    .header-placeholder {height: 50px;}
-  }
 }

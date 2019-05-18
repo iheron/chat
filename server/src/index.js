@@ -120,7 +120,7 @@ function onListening () {
   console.log('Listening on ' + bind)
 }
 
-let port = normalizePort(process.env.PORT || '3000')
+let port = normalizePort(process.env.PORT || '3001')
 
 let server = http.createServer(app)
 

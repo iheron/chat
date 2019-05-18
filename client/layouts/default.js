@@ -4,7 +4,7 @@ import Helmet from 'react-helmet'
 import { Layout, Menu, Breadcrumb } from 'antd'
 //import Header from '../containers/header'
 import '../themes/default.less'
-
+import '../styles/index.scss'
 export default ({children, title, theme}) => (
   <div className={`theme ${theme ? 'theme-' + theme : ''}`}>
     <Head>
