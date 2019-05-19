@@ -1,6 +1,8 @@
 let MessageType = {
+  ALL     : 'all',
   SYSTEM  : 'system',
-  FUNCTION: 'function'
+  FUNCTION: 'function',
+  MESSAGE : 'message'
 }
 
 export { MessageType }
