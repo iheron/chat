@@ -41,4 +41,14 @@ router.put('/send', async function (req, res, next) {
   }
 })
 
+router.get('/last_message', async function (req, res, next) {
+  let {user, n} = req.query
+  try {
+    let list = await chatStorage.getLastMessage(parseInt(n), user)
+    res.json(list)
+  } catch (e) {
+    next(e)
+  }
+})
+
 export default router

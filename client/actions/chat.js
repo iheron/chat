@@ -2,6 +2,7 @@ import { api } from '../helper/api'
 import { fetch, constants } from '../helper/fetch'
 
 import ChatHelper from '../helper/chat'
+import { MessageType } from '../helper/const'
 
 const chatHelper = new ChatHelper()
 
@@ -74,6 +75,30 @@ export function send(fromUser, toUser, message, callback) {
       dispatch: dispatch,
       success : (data) => {
         callback(data)
+        return {data}
+      },
+      error   : (error) => ({error})
+    })
+  }
+}
+
+export const GET_MESSAGE_LOG = 'GET_MESSAGE_LOG'
+export function getLastMessage(user, n) {
+  return (dispatch) => {
+    fetch({
+      axios   : api.get(`/chat/last_message?user=${user}&n=${n}`,),
+      constant: GET_MESSAGE_LOG,
+      dispatch: dispatch,
+      success : (data) => {
+        data.map((item) => {
+          item.type = MessageType.MESSAGE
+          item.from = item.from_name
+          item.to = item.to_name
+          if (item.from_name === user) {
+            item.mine = true
+          }
+          return item
+        })
         return {data}
       },
       error   : (error) => ({error})

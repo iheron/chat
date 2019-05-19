@@ -8,15 +8,9 @@ import chatRouter from './routes/chat'
 
 import MongodbStorage from './storages/mongodbStorage'
 
-import indexRouter from './routes'
-
-
-
 let app = express()
 
-
-
-//MongodbStorage.connectionMongodb(config.mongodb)
+MongodbStorage.connectionMongodb(config.mongodb)
 
 app.use(logger('dev'))
 app.use(bodyParser.json())

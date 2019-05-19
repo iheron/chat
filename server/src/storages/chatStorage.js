@@ -5,6 +5,7 @@ import nkn from 'nkn-client'
 import find from 'lodash/find'
 import map from 'lodash/map'
 import mongoose from 'mongoose'
+import chatSchema from '../schemas/chatSchema'
 
 const _TIME_OUT_ = 5      // seconds
 
@@ -13,7 +14,7 @@ export default class ChatStorage {
   constructor () {
     this.clients = []   // online clients
     this.service = nkn()
-    //this.adminModel = mongoose.connection.model('admins', adminSchema)
+    this.chatLogsModel = mongoose.connection.model('chat_logs', chatSchema)
 
   }
 
@@ -36,12 +37,19 @@ export default class ChatStorage {
    * @param message object
    */
   send (type, from, to, message) {
+    this.chatLogsModel.create({from_name: from, to_name: 'all' ===to? '' : to, message: message, time: moment()})
     if (to === MessageType.ALL) {
       this.broadcast(MessageType.MESSAGE, from, {message})
       return true
     } else {
       let findUser = find(this.clients, {username: to})
-      this.service.send(findUser.addr, JSON.stringify({message:message, type: type, from: from, to: to, time: moment()}))
+      this.service.send(findUser.addr, JSON.stringify({
+        message: message,
+        type   : type,
+        from   : from,
+        to     : to,
+        time   : moment()
+      }))
         .then(data => {return true})
         .catch((e) => {throw e})
       return true
@@ -70,6 +78,10 @@ export default class ChatStorage {
       message: `${username} has joined the room`,
     })
     return true
+  }
+
+  async getLastMessage(n, user){
+    return await this.chatLogsModel.find({$or:[{from_name: user},{to_name:user}]}).sort({_id: -1}).limit(n)
   }
 
   getClientList () {

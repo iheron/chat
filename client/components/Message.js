@@ -21,7 +21,9 @@ class Message extends Component {
 
   render () {
     let {type, from, to, time, message, mine, loading} = this.props
-    console.log('to:', to)
+    if (loading === undefined) {
+      loading = false
+    }
     if (type === MessageType.SYSTEM) {
       return <div className={styles['system-message']}>
         <div className={styles.avatar}>

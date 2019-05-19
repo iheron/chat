@@ -1,3 +1,4 @@
+import map from 'lodash/map'
 import moment from 'moment'
 import { Component } from 'react'
 import { connect } from 'react-redux'
@@ -5,7 +6,7 @@ import DefaultLayout from '../layouts/default'
 import Helmet from 'react-helmet'
 import Router from 'next/router'
 import { MessageType } from '../helper/const'
-import { getUsers, createClient, send } from '../actions/chat'
+import { getUsers, createClient, send, getLastMessage } from '../actions/chat'
 import { Input, Icon, PageHeader, Button, List, Tag, Dropdown, Menu } from 'antd'
 import Message from '../components/Message'
 import styles from '../styles/chat.scss'
@@ -23,13 +24,13 @@ class Chat extends Component {
     return {}
   }
 
-  state = {message: '', toUser: 'all', to: 'all', messageArea: []}
+  state = {message: '', toUser: 'all', to: 'all', messageArea: [], lastMessageFlast: false}
 
   componentWillMount () {
     if (typeof window !== 'undefined') {
-      let {chat, createClient, getUsers} = this.props
+      let {chat, createClient, getLastMessage} = this.props
       createClient(chat.username)
-
+      getLastMessage(chat.username, 10)
       this.messageAreaRef = React.createRef()
     }
   }
@@ -47,9 +48,6 @@ class Chat extends Component {
   }
 
   showMessage = (message) => {
-    this.setState({messageArea: this.state.messageArea.concat(message)})
-  }
-  showMyMessage = (message) =>{
     this.setState({messageArea: this.state.messageArea.concat(message)}, () => {
       this.messageAreaRef.current.scrollTop = this.messageAreaRef.current.scrollHeight
     })
@@ -57,7 +55,8 @@ class Chat extends Component {
 
   componentWillReceiveProps (nextProps) {
     let {joinRoom, users} = nextProps.chat
-    let {getUsers, chat} = this.props
+    let {lastMessage} = nextProps
+    let {getUsers, chat } = this.props
     if (joinRoom && !users.loading && !users.data.length) {
       getUsers()
       //chat.client.on('connect', () => {
@@ -65,7 +64,7 @@ class Chat extends Component {
       //})
 
       chat.client.on('message', (src, payload, payloadType) => {
-        console.log('-------------nkn on message----------')
+        console.log('-------------on message----------')
         console.log(payload)
         let message = JSON.parse(payload)
         if (message.type === MessageType.SYSTEM) { // system message
@@ -80,6 +79,11 @@ class Chat extends Component {
 
         }
       })
+    }
+
+    if (!lastMessage.loading && !!lastMessage.data && lastMessage.data.length && !this.state.lastMessageFlast) {
+      this.setState({lastMessageFlast: true})
+      this.showMessage(lastMessage.data)
     }
   }
 
@@ -205,12 +209,14 @@ class Chat extends Component {
 }
 
 const mapStateToProps = (store) => ({
-  chat: store.chat,
-  users: store.chat.users
+  chat       : store.chat,
+  users      : store.chat.users,
+  lastMessage: store.chat.lastMessage
 })
 const mapDispatchToProps = (dispatch) => ({
-  createClient: (username) => dispatch(createClient(username)),
-  getUsers    : () => dispatch(getUsers()),
-  send        : (fromUser, toUser, message, callback) => dispatch(send(fromUser, toUser, message, callback))
+  createClient  : (username) => dispatch(createClient(username)),
+  getUsers      : () => dispatch(getUsers()),
+  send          : (fromUser, toUser, message, callback) => dispatch(send(fromUser, toUser, message, callback)),
+  getLastMessage: (user, n) => dispatch(getLastMessage(user, n))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Chat)
