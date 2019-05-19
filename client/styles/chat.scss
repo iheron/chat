@@ -71,7 +71,7 @@
 }
 
 .footer {
-  height: 50px;padding-left: 10px;padding-right: 10px;display: flex;
+  height: 50px;padding-left: 10px;padding-right: 10px;display: flex;flex-shrink: 0;
   .to-message {
     width: 200px;flex-shrink: 0;
   }
