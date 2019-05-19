@@ -81,7 +81,7 @@ export default class ChatStorage {
   }
 
   async getLastMessage(n, user){
-    return await this.chatLogsModel.find({$or:[{from_name: user},{to_name:user}]}).sort({_id: -1}).limit(n)
+    return await this.chatLogsModel.find({$or:[{from_name: user},{to_name:user}, {to_name:''}]}).sort({_id: -1}).limit(n)
   }
 
   getClientList () {
