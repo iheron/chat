@@ -18,27 +18,33 @@ export default class ChatStorage {
   }
 
   /**
-   *
+   * @param type MessageType
    * @param from 'system': client show a 'system' tag
    * @param message
    */
-  broadcast (from, message) {
+  broadcast (type, from, message) {
+    message = {...message, type: type, from: from, time: moment()}
     this.clients.forEach((item) => {
-      this.service.send(item.addr, message)
+      this.service.send(item.addr, JSON.stringify(message)).catch((e) => {throw e})
     })
   }
 
   /**
-   *
+   * @param type MessageType
    * @param from 'all': boradcast to every one
    * @param to
-   * @param message
+   * @param message object
    */
-  send (from, to, message) {
-    if (from === MessageType.ALL) {
-      this.broadcast(from, message)
+  send (type, from, to, message) {
+    if (to === MessageType.ALL) {
+      this.broadcast(MessageType.MESSAGE, from, {message})
+      return true
     } else {
-      this.servce.send(to, {...message, to: to, time: moment()})
+      let findUser = find(this.clients, {username: to})
+      this.service.send(findUser.addr, JSON.stringify({message:message, type: type, from: from, to: to, time: moment()}))
+        .then(data => {return true})
+        .catch((e) => {throw e})
+      return true
     }
   }
 
@@ -60,11 +66,9 @@ export default class ChatStorage {
     } else {
       this.clients.push({addr: addr, username: username})
     }
-    this.broadcast(MessageType.SYSTEM, JSON.stringify({
-      type   : MessageType.SYSTEM,
+    this.broadcast(MessageType.SYSTEM, MessageType.SYSTEM, {
       message: `${username} has joined the room`,
-      time   : moment()
-    }))
+    })
     return true
   }
 

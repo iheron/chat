@@ -1,15 +1,14 @@
+import moment from 'moment'
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import DefaultLayout from '../layouts/default'
 import Helmet from 'react-helmet'
 import Router from 'next/router'
 import { MessageType } from '../helper/const'
-import { getUsers, createClient } from '../actions/chat'
+import { getUsers, createClient, send } from '../actions/chat'
 import { Input, Icon, PageHeader, Button, List, Tag, Dropdown, Menu } from 'antd'
 import Message from '../components/Message'
 import styles from '../styles/chat.scss'
-
-
 
 class Chat extends Component {
   static getInitialProps ({store, req, res}) {
@@ -24,12 +23,14 @@ class Chat extends Component {
     return {}
   }
 
-  state = {message: '', toUser: 'all', to: 'all', messageArea : []}
+  state = {message: '', toUser: 'all', to: 'all', messageArea: []}
 
   componentWillMount () {
     if (typeof window !== 'undefined') {
       let {chat, createClient, getUsers} = this.props
       createClient(chat.username)
+
+      this.messageAreaRef = React.createRef()
     }
   }
 
@@ -37,12 +38,21 @@ class Chat extends Component {
 
   }
 
+  componentUpdateMount () {
+
+  }
+
   componentWillUnmount () {
 
   }
 
-  showSystemMessage = (message) => {
+  showMessage = (message) => {
     this.setState({messageArea: this.state.messageArea.concat(message)})
+  }
+  showMyMessage = (message) =>{
+    this.setState({messageArea: this.state.messageArea.concat(message)}, () => {
+      this.messageAreaRef.current.scrollTop = this.messageAreaRef.current.scrollHeight
+    })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -55,9 +65,19 @@ class Chat extends Component {
       //})
 
       chat.client.on('message', (src, payload, payloadType) => {
+        console.log('-------------nkn on message----------')
+        console.log(payload)
         let message = JSON.parse(payload)
         if (message.type === MessageType.SYSTEM) { // system message
-          this.showSystemMessage(message)
+          this.showMessage(message)
+          getUsers()
+        } else if (message.type === MessageType.MESSAGE) { //  message
+          if (message.from === chat.username) {
+            //message = {...message, mine:true}
+          } else {
+            this.showMessage(message)
+          }
+
         }
       })
     }
@@ -73,7 +93,14 @@ class Chat extends Component {
         this.setState({toUser: user.username, to: user.addr})
       }
     }
+  }
 
+  onLeftPadClick = (toUser, toAddr) => {
+    return (e) => {
+      if (!!toUser) {
+        this.setState({toUser: toUser, to: toAddr})
+      }
+    }
   }
 
   onChange = (e) => {
@@ -81,9 +108,28 @@ class Chat extends Component {
     this.setState({message: value})
   }
 
-  handleSend = (e)=>{
-    console.log('--------------------')
+  handleSend = (e) => {
+    let {send, chat} = this.props
+    this.showMessage({
+      message: this.state.message,
+      type   : MessageType.MESSAGE,
+      mine   : true,
+      loading: true,
+      from   : chat.username,
+      to     : 'all' === this.state.toUser ? '' : this.state.toUser,
+      time   : moment().format()
+    })
+    let length = this.state.messageArea.length
+    send(chat.username, this.state.toUser, this.state.message, (data) => {
+      if (data.code === 0) {
+        let messageArea = this.state.messageArea
+        messageArea[length].loading = false
+        this.setState({messageArea: messageArea})
+      }
+    })
+    this.setState({message: ''})
   }
+
   render () {
     let {users} = this.props
     const menu = (
@@ -99,7 +145,6 @@ class Chat extends Component {
         </Menu.Item>
       </Menu>
     )
-    console.log(this.state.messageArea)
     return (
       <DefaultLayout theme={this.props.theme}>
         <Helmet>
@@ -116,69 +161,28 @@ class Chat extends Component {
               dataSource={users.data}
               renderItem={item => (
                 <List.Item>
-                  {!!item.you &&
+                  {item.username === this.props.chat.username &&
                   <Button type="link">
                     <Icon type="user" style={{fontSize: '18px'}}/>
                     {item.username}
                   </Button>
                   }
-                  {!item.you &&
-                  <Button type="link">
+                  {item.username !== this.props.chat.username &&
+                  <Button type="link" onClick={this.onLeftPadClick(item.username, item.addr)}>
                     <Icon type="user" style={{fontSize: '18px'}}/>
                     {item.username}
                   </Button>
                   }
 
-
-                  {!!item.you &&
+                  {item.username === this.props.chat.username &&
                   <Tag className={styles.you} color="green">you</Tag>
                   }
                 </List.Item>
               )}
             />
           </div>
-          <div className={`${styles['message-area']}`}>
-            <div className={styles['message-to']}>
-              <div className={styles.avatar}>
-                <Button type="link">
-                  <Icon type="user" style={{fontSize: '18px'}}/>
-                  User1
-                </Button>
-                <div className={styles.time}>5/4 18:30</div>
-              </div>
-              <div className={styles.message}>
-                <div className={styles.arrow}></div>
-                <div className={styles['message-inner']} role="tooltip"><span>Hello! </span></div>
-              </div>
-            </div>
-            <div className={styles['message-to']}>
-              <div className={styles.avatar}>
-                <Button type="link">
-                  <Icon type="user" style={{fontSize: '18px'}}/>
-                  User1
-                </Button>
-                <div className={styles.time}>5/4 18:30</div>
-              </div>
-              <div className={styles.message}>
-                <div className={styles.arrow}></div>
-                <div className={styles['message-inner']} role="tooltip"><span>Are you OK?</span></div>
-              </div>
-            </div>
-            <div className={styles['message-from']}>
-              <div className={styles.avatar}>
-                <Button type="link">
-                  sdfsdf
-                  <Icon type="user" style={{fontSize: '18px'}}/>
-                </Button>
-                <div className={styles.time}>5/4 18:30</div>
-              </div>
-              <div className={styles.message}>
-                <div className={styles.arrow}></div>
-                <div className={styles['message-inner']} role="tooltip"><span>I'm fine. Thank you. And you?</span></div>
-              </div>
-            </div>
-
-            {this.state.messageArea && this.state.messageArea.map((item, index)=> (
+          <div className={`${styles['message-area']}`} ref={this.messageAreaRef}>
+            {this.state.messageArea && this.state.messageArea.map((item, index) => (
               <Message key={index} {...item} />
             ))}
           </div>
@@ -190,7 +194,7 @@ class Chat extends Component {
           </Dropdown.Button>
 
           <div className={styles['message-enter']}>
-            <Input autoFocus onChange={this.onChange}/>
+            <Input autoFocus onChange={this.onChange} value={this.state.message} onPressEnter={this.handleSend}/>
             <Button type="primary" disabled={!this.state.message} onClick={this.handleSend}>Send</Button>
           </div>
         </div>
@@ -201,11 +205,12 @@ class Chat extends Component {
 }
 
 const mapStateToProps = (store) => ({
-  chat : store.chat,
+  chat: store.chat,
   users: store.chat.users
 })
 const mapDispatchToProps = (dispatch) => ({
   createClient: (username) => dispatch(createClient(username)),
-  getUsers    : () => dispatch(getUsers())
+  getUsers    : () => dispatch(getUsers()),
+  send        : (fromUser, toUser, message, callback) => dispatch(send(fromUser, toUser, message, callback))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Chat)

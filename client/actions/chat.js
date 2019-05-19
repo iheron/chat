@@ -64,3 +64,19 @@ export function getUsers () {
     })
   }
 }
+
+export const SEND_MESSAGE = 'SEND_MESSAGE'
+export function send(fromUser, toUser, message, callback) {
+  return (dispatch) => {
+    fetch({
+      axios   : api.put(`/chat/send`, {from:fromUser, to:toUser, message: message}),
+      constant: SEND_MESSAGE,
+      dispatch: dispatch,
+      success : (data) => {
+        callback(data)
+        return {data}
+      },
+      error   : (error) => ({error})
+    })
+  }
+}
