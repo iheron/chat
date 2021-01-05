@@ -22,7 +22,7 @@
     "@zeit/next-sass": "^1.0.1",
     "antd": "^3.18.1",
     "antd-mobile": "^2.2.13",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-plugin-import": "^1.11.2",
     "bignumber.js": "^7.2.1",
     "body-parser": "^1.18.3",
